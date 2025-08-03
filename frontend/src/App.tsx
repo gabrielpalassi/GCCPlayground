@@ -12,6 +12,7 @@ import type { CompilerFlags, Result } from "./types";
 import { getMockResult } from "./lib/mockData";
 import { DEFAULT_C_CODE } from "./lib/constants";
 import { defineCustomTheme } from "./lib/monacoTheme";
+import { API_ENDPOINTS } from "./config/api.js";
 import axios from "axios";
 import "./App.css";
 
@@ -38,7 +39,7 @@ export default function App() {
       }, 500);
     } else {
       axios
-        .post("http://localhost:3001/api/compile", {
+        .post(API_ENDPOINTS.compile, {
           code,
           flags,
         })
