@@ -91,17 +91,20 @@ src/
 ### Tecnologias Utilizadas
 
 #### Framework e Servidor
+
 - **Express.js** - Framework web para Node.js
 - **CORS** - Middleware para Cross-Origin Resource Sharing
 - **Helmet** - Middleware de segurança
 - **Morgan** - Logger de requisições HTTP
 
 #### Compilação e Análise
+
 - **Child Process** - Execução de comandos GCC
 - **File System** - Operações de arquivo para código temporário
 - **UUID** - Geração de IDs únicos para sessões
 
 #### Segurança e Validação
+
 - **Express Rate Limit** - Limitação de taxa de requisições
 - **Validação Customizada** - Validação de entrada de dados
 - **Error Handling** - Tratamento abrangente de erros
@@ -112,6 +115,42 @@ src/
 - `npm start` - Iniciar servidor de produção
 - `npm test` - Executar testes unitários
 
+### Script de Inicialização (start-dev.sh)
+
+O projeto inclui um script de inicialização automatizada localizado em `backend/scripts/start-dev.sh` que facilita o setup e execução do ambiente de desenvolvimento.
+
+#### Funcionalidades do Script
+
+- **Verificação de Dependências**: Automaticamente verifica se o GCC está instalado no sistema
+- **Validação de Ferramentas**: Checa a disponibilidade de `objdump` e `hexdump` para funcionalidades avançadas
+- **Instalação Automática**: Instala as dependências do Node.js se o diretório `node_modules` não existir
+- **Preparação do Ambiente**: Cria o diretório `temp` necessário para armazenar arquivos temporários
+- **Inicialização do Servidor**: Inicia automaticamente o servidor de desenvolvimento
+
+#### Como Usar
+
+1. Torne o script executável (apenas na primeira vez):
+
+```bash
+chmod +x backend/scripts/start-dev.sh
+```
+
+2. Execute o script:
+
+```bash
+./backend/scripts/start-dev.sh
+```
+
+#### Verificações Realizadas
+
+O script realiza as seguintes verificações antes de iniciar o servidor:
+
+- ✅ **GCC**: Verifica se o compilador está instalado e disponível no PATH
+- ⚠️ **objdump**: Avisa se não estiver disponível (necessário para dump assembly)
+- ⚠️ **hexdump**: Avisa se não estiver disponível (necessário para dump binário)
+
+Se alguma dependência crítica estiver faltando, o script fornece instruções específicas para instalação em diferentes sistemas operacionais.
+
 ### Pré-requisitos
 
 - **Node.js** 18+
@@ -121,16 +160,19 @@ src/
 ### Instalação e Execução
 
 1. Navegue para o diretório backend:
+
 ```bash
 cd backend
 ```
 
 2. Instale as dependências:
+
 ```bash
 npm install
 ```
 
 3. Inicie o servidor de desenvolvimento:
+
 ```bash
 npm run dev
 ```
@@ -146,17 +188,20 @@ O servidor iniciará em `http://localhost:3001`
 #### Instalando GCC
 
 **Ubuntu/Debian:**
+
 ```bash
 sudo apt update
 sudo apt install build-essential
 ```
 
 **macOS:**
+
 ```bash
 xcode-select --install
 ```
 
 **Windows:**
+
 - Instale MinGW-w64 ou use WSL
 - Certifique-se de que GCC está no PATH do sistema
 
@@ -185,17 +230,20 @@ A API retorna códigos de status HTTP apropriados e mensagens de erro:
 ### Implantação em Produção
 
 1. Configure as variáveis de ambiente:
+
 ```bash
 export NODE_ENV=production
 export PORT=3001
 ```
 
 2. Instale as dependências:
+
 ```bash
 npm install --production
 ```
 
 3. Inicie o servidor:
+
 ```bash
 npm start
 ```
@@ -204,6 +252,7 @@ npm start
 
 **GCC Não Encontrado**
 Certifique-se de que GCC está instalado e disponível no PATH do sistema:
+
 ```bash
 gcc --version
 ```
@@ -212,21 +261,24 @@ gcc --version
 Certifique-se de que a aplicação tem permissões de escrita para o diretório temp.
 
 **Timeouts de Compilação**
-Arquivos de código grandes ou compilações complexas podem causar timeout. Considere implementar um mecanismo de timeout para uso em produção.
+Arquivos de código grandes ou compilações complexas podem causar timeout.
 
 ### Endpoints da API
 
 #### Health Check
+
 ```
 GET /api/health
 ```
 
 #### Compilar Código
+
 ```
 POST /api/compile
 ```
 
 **Corpo da Requisição:**
+
 ```json
 {
   "code": "#include <stdio.h>\n\nint main() {\n    printf(\"Hello, World!\\n\");\n    return 0;\n}",
@@ -241,6 +293,7 @@ POST /api/compile
 ```
 
 **Resposta:**
+
 ```json
 {
   "success": true,
