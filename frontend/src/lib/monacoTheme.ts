@@ -1,4 +1,4 @@
-export const defineCustomTheme = (monaco: any) => {
+export function defineCustomTheme(monaco: any) {
   monaco.editor.defineTheme("gccPlaygroundLight", {
     base: "vs",
     inherit: true,
@@ -33,4 +33,4 @@ export const defineCustomTheme = (monaco: any) => {
       "scrollbarSlider.activeBackground": "#9ca3af",
     },
   });
-};
+}

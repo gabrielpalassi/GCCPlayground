@@ -1,20 +1,20 @@
 import { useState } from "react";
-import { Button } from "./components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "./components/ui/card";
-import { Label } from "./components/ui/label";
-import { Switch } from "./components/ui/switch";
-import { RadioGroup, RadioGroupItem } from "./components/ui/radio-group";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "./components/ui/tabs";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Play, Settings, Terminal, FileCode, Binary } from "lucide-react";
 import Editor from "@monaco-editor/react";
-import CodeEditor from "./components/code-editor";
-import type { CompilerFlags, Result } from "./types";
-import { getMockResult } from "./lib/mockData";
-import { DEFAULT_C_CODE } from "./lib/constants";
-import { defineCustomTheme } from "./lib/monacoTheme";
-import { API_ENDPOINTS } from "./config/api.js";
+import CodeEditor from "@/components/code-editor";
+import type { CompilerFlags, Result } from "@/types";
+import { getMockResult } from "@/lib/mockData";
+import { DEFAULT_C_CODE } from "@/lib/constants";
+import { defineCustomTheme } from "@/lib/monacoTheme";
+import { API_ENDPOINTS } from "@/config/api.js";
 import axios from "axios";
-import "./App.css";
+import "@/App.css";
 
 export default function App() {
   const [code, setCode] = useState(DEFAULT_C_CODE);
@@ -31,7 +31,7 @@ export default function App() {
   function handleCompile() {
     setIsCompiling(true);
 
-    const useMockData = false; // Set to false to use real backend
+    const useMockData = false;
     if (useMockData) {
       setTimeout(() => {
         setResult(getMockResult(code));
@@ -50,7 +50,9 @@ export default function App() {
           setResult({
             success: false,
             output: `Erro na compilação: ${
-              error.response?.data?.message || error.message || "Erro desconhecido"
+              error.response?.data?.message ||
+              error.message ||
+              "Erro desconhecido"
             }`,
             assembly: "",
             binary: "",

@@ -1,5 +1,5 @@
 import Editor from "@monaco-editor/react";
-import { defineCustomTheme } from "../lib/monacoTheme";
+import { defineCustomTheme } from "@/lib/monacoTheme";
 
 interface CodeEditorProps {
   value: string;
