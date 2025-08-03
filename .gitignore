@@ -82,3 +82,32 @@
 # Vercel
 
 **/.vercel
+
+# Backend specific
+**/temp/
+**/tmp/
+**/logs
+**/*.log
+**/coverage/
+**/*.lcov
+**/.nyc_output
+**/.grunt
+**/bower_components
+**/.lock-wscript
+**/build/Release
+**/jspm_packages/
+**/.npm
+**/.node_repl_history
+**/.yarn-integrity
+**/.rpt2_cache/
+**/.rts2_cache_cjs/
+**/.rts2_cache_es/
+**/.rts2_cache_umd/
+**/.parcel-cache
+**/.next
+**/.nuxt
+**/.cache/
+**/public
+**/.out
+**/.storybook-out
+**/lib-cov

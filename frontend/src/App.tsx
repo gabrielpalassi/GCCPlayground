@@ -30,7 +30,7 @@ export default function App() {
   function handleCompile() {
     setIsCompiling(true);
 
-    const useMockData = true;
+    const useMockData = false; // Set to false to use real backend
     if (useMockData) {
       setTimeout(() => {
         setResult(getMockResult(code));
@@ -38,7 +38,7 @@ export default function App() {
       }, 500);
     } else {
       axios
-        .post("/api/compile", {
+        .post("http://localhost:3001/api/compile", {
           code,
           flags,
         })
@@ -49,7 +49,7 @@ export default function App() {
           setResult({
             success: false,
             output: `Erro na compilação: ${
-              error instanceof Error ? error.message : "Erro desconhecido"
+              error.response?.data?.message || error.message || "Erro desconhecido"
             }`,
             assembly: "",
             binary: "",
