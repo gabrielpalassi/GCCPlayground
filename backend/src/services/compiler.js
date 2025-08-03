@@ -1,14 +1,14 @@
-import { spawn, exec } from 'child_process';
-import { writeFile, readFile, unlink } from 'fs/promises';
-import { join } from 'path';
-import { v4 as uuidv4 } from 'uuid';
-import { promisify } from 'util';
+import { spawn, exec } from "child_process";
+import { writeFile, readFile, unlink } from "fs/promises";
+import { join } from "path";
+import { v4 as uuidv4 } from "uuid";
+import { promisify } from "util";
 
 const execAsync = promisify(exec);
 
 export async function compileCode(code, flags) {
   const sessionId = uuidv4();
-  const tempDir = join(process.cwd(), 'temp');
+  const tempDir = join(process.cwd(), "temp");
   const sourceFile = join(tempDir, `${sessionId}.c`);
   const outputFile = join(tempDir, `${sessionId}`);
   const assemblyFile = join(tempDir, `${sessionId}.s`);
@@ -18,7 +18,7 @@ export async function compileCode(code, flags) {
     await ensureTempDir(tempDir);
 
     // Write source code to file
-    await writeFile(sourceFile, code, 'utf8');
+    await writeFile(sourceFile, code, "utf8");
 
     // Build GCC command
     const gccFlags = buildGccFlags(flags);
@@ -26,36 +26,35 @@ export async function compileCode(code, flags) {
 
     // Compile the code
     const compileResult = await executeCommand(gccCommand);
-    
+
     if (compileResult.success) {
       // Generate assembly dump
       const assemblyResult = await generateAssembly(outputFile);
-      
+
       // Generate binary dump
       const binaryResult = await generateBinaryDump(outputFile);
 
       return {
         success: true,
-        output: compileResult.stdout || 'Compilation successful',
+        output: compileResult.stdout || "Compilation successful",
         assembly: assemblyResult,
-        binary: binaryResult
+        binary: binaryResult,
       };
     } else {
       return {
         success: false,
-        output: compileResult.stderr || 'Compilation failed',
-        assembly: '',
-        binary: ''
+        output: compileResult.stderr || "Compilation failed",
+        assembly: "",
+        binary: "",
       };
     }
-
   } catch (error) {
-    console.error('Compilation error:', error);
+    console.error("Compilation error:", error);
     return {
       success: false,
       output: `Compilation error: ${error.message}`,
-      assembly: '',
-      binary: ''
+      assembly: "",
+      binary: "",
     };
   } finally {
     // Cleanup temporary files
@@ -65,52 +64,52 @@ export async function compileCode(code, flags) {
 
 function buildGccFlags(flags) {
   const flagArray = [];
-  
-  if (flags.wall) flagArray.push('-Wall');
-  if (flags.werror) flagArray.push('-Werror');
-  if (flags.debug) flagArray.push('-g');
-  if (flags.static) flagArray.push('-static');
+
+  if (flags.wall) flagArray.push("-Wall");
+  if (flags.werror) flagArray.push("-Werror");
+  if (flags.debug) flagArray.push("-g");
+  if (flags.static) flagArray.push("-static");
   if (flags.optimization) flagArray.push(`-${flags.optimization}`);
-  
-  return flagArray.join(' ');
+
+  return flagArray.join(" ");
 }
 
 async function executeCommand(command) {
   return new Promise((resolve) => {
-    const isWindows = process.platform === 'win32';
-    const shell = isWindows ? 'cmd' : 'bash';
-    const args = isWindows ? ['/c', command] : ['-c', command];
-    
-    const process = spawn(shell, args, {
-      stdio: ['pipe', 'pipe', 'pipe']
+    const isWindows = process.platform === "win32";
+    const shell = isWindows ? "cmd" : "bash";
+    const args = isWindows ? ["/c", command] : ["-c", command];
+
+    const shellProcess = spawn(shell, args, {
+      stdio: ["pipe", "pipe", "pipe"],
     });
 
-    let stdout = '';
-    let stderr = '';
+    let stdout = "";
+    let stderr = "";
 
-    process.stdout.on('data', (data) => {
+    shellProcess.stdout.on("data", (data) => {
       stdout += data.toString();
     });
 
-    process.stderr.on('data', (data) => {
+    shellProcess.stderr.on("data", (data) => {
       stderr += data.toString();
     });
 
-    process.on('close', (code) => {
+    shellProcess.on("close", (code) => {
       resolve({
         success: code === 0,
         stdout: stdout.trim(),
         stderr: stderr.trim(),
-        code
+        code,
       });
     });
 
-    process.on('error', (error) => {
+    shellProcess.on("error", (error) => {
       resolve({
         success: false,
-        stdout: '',
+        stdout: "",
         stderr: error.message,
-        code: -1
+        code: -1,
       });
     });
   });
@@ -118,13 +117,13 @@ async function executeCommand(command) {
 
 async function generateAssembly(outputFile) {
   try {
-    const command = `objdump -d "${outputFile}"`;
+    const command = `objdump -d "${outputFile}" | tail -n +3`;
     const result = await executeCommand(command);
-    
+
     if (result.success) {
       return result.stdout;
     } else {
-      return 'Failed to generate assembly dump';
+      return "Failed to generate assembly dump";
     }
   } catch (error) {
     return `Error generating assembly: ${error.message}`;
@@ -133,13 +132,13 @@ async function generateAssembly(outputFile) {
 
 async function generateBinaryDump(outputFile) {
   try {
-    const command = `hexdump -C "${outputFile}" | head -20`;
+    const command = `hexdump -C "${outputFile}"`;
     const result = await executeCommand(command);
-    
+
     if (result.success) {
       return result.stdout;
     } else {
-      return 'Failed to generate binary dump';
+      return "Failed to generate binary dump";
     }
   } catch (error) {
     return `Error generating binary dump: ${error.message}`;
@@ -148,10 +147,10 @@ async function generateBinaryDump(outputFile) {
 
 async function ensureTempDir(tempDir) {
   try {
-    const { mkdir } = await import('fs/promises');
+    const { mkdir } = await import("fs/promises");
     await mkdir(tempDir, { recursive: true });
   } catch (error) {
-    if (error.code !== 'EEXIST') {
+    if (error.code !== "EEXIST") {
       throw error;
     }
   }
@@ -163,9 +162,9 @@ async function cleanupFiles(files) {
       await unlink(file);
     } catch (error) {
       // Ignore errors if file doesn't exist
-      if (error.code !== 'ENOENT') {
+      if (error.code !== "ENOENT") {
         console.error(`Error cleaning up file ${file}:`, error);
       }
     }
   }
-} 
+}
